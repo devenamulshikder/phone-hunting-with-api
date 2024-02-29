@@ -1,14 +1,14 @@
-const loadData = async (searchText) => {
+const loadData = async (searchText, isShowAll) => {
   const res = await fetch(
     `https://openapi.programming-hero.com/api/phones?search=${searchText}`
   );
   const data = await res.json();
   const phones = data.data;
   // console.log(phones);
-  displayPhone(phones);
+  displayPhone(phones, isShowAll);
 };
 
-const displayPhone = (phones) => {
+const displayPhone = (phones, isShowAll) => {
   // step-1 get element by id
   const phoneContainer = document.getElementById("phone-container");
   // clear phone container card before adding new cards
@@ -17,14 +17,17 @@ const displayPhone = (phones) => {
   // display show all button if condition
   const showAllContainer = document.getElementById("show-all-container");
 
-  if (phones.length > 12) {
+  if (phones.length > 12 && !isShowAll) {
     showAllContainer.classList.remove("hidden");
   } else {
     showAllContainer.classList.add("hidden");
   }
 
-  // display first 12 phone
-  phones = phones.slice(0, 12);
+  // display first 12 phone if not show all
+  if (!isShowAll) {
+    phones = phones.slice(0, 12);
+  } else {
+  }
 
   phones.forEach((phones) => {
     // console.log(phones);
@@ -46,26 +49,31 @@ const displayPhone = (phones) => {
           <button class="btn btn-primary">Buy Now</button>
         </div>
       </div>`;
-      // step-4 appendChild
+    // step-4 appendChild
     phoneContainer.appendChild(phoneCard);
   });
   // hide loading spinner
-  toggleLoadingSpinner(false)
+  toggleLoadingSpinner(false);
 };
 
 // handle search
-const handleSearch = () => {
+const handleSearch = (isShowAll) => {
   toggleLoadingSpinner(true);
   const inputField = document.getElementById("input-field");
   const searchText = inputField.value;
-  loadData(searchText);
+  loadData(searchText, isShowAll);
 };
 
 const toggleLoadingSpinner = (isLoading) => {
   const loadingSpinner = document.getElementById("loading-spinner");
   if (!!isLoading) {
     loadingSpinner.classList.remove("hidden");
-  } else{
+  } else {
     loadingSpinner.classList.add("hidden");
   }
+};
+
+// handle show all btn
+const handleShowAll = () => {
+  handleSearch(true);
 };
