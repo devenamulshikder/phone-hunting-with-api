@@ -1,6 +1,6 @@
-const loadData = async () => {
+const loadData = async (searchText) => {
   const res = await fetch(
-    `https://openapi.programming-hero.com/api/phones?search=iphone`
+    `https://openapi.programming-hero.com/api/phones?search=${searchText}`
   );
   const data = await res.json();
   const phones = data.data;
@@ -9,10 +9,12 @@ const loadData = async () => {
 };
 
 const displayPhone = (phones) => {
-  // step-1 
+  // step-1 get element by id
   const phoneContainer = document.getElementById("phone-container");
-  phones.forEach(phones => {
-    console.log(phones);
+  // clear phone container card before adding new cards
+  phoneContainer.textContent = "";
+  phones.forEach((phones) => {
+    // console.log(phones);
     // step-2 create a div
     const phoneCard = document.createElement("div");
     phoneCard.classList = `card w-96 bg-gray-100 shadow-xl`;
@@ -25,16 +27,21 @@ const displayPhone = (phones) => {
         />
       </figure>
       <div class="card-body items-center text-center">
-        <h2 class="card-title">${phones.phone_name
-        }</h2>
+        <h2 class="card-title">${phones.phone_name}</h2>
         <p>If a dog chews shoes whose shoes does he choose?</p>
         <div class="card-actions">
           <button class="btn btn-primary">Buy Now</button>
         </div>
       </div>`;
-      phoneContainer.appendChild(phoneCard)
+    phoneContainer.appendChild(phoneCard);
     // step-4 appendChild
-
   });
 };
-loadData();
+
+// handle search
+const handleSearch = () => {
+  const inputField = document.getElementById("input-field");
+  const searchText = inputField.value;
+  // console.log(searchText);
+  loadData(searchText);
+};
