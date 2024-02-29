@@ -13,11 +13,24 @@ const displayPhone = (phones) => {
   const phoneContainer = document.getElementById("phone-container");
   // clear phone container card before adding new cards
   phoneContainer.textContent = "";
+
+  // display show all button if condition
+  const showAllContainer = document.getElementById("show-all-container");
+
+  if (phones.length > 12) {
+    showAllContainer.classList.remove("hidden");
+  } else {
+    showAllContainer.classList.add("hidden");
+  }
+
+  // display first 12 phone
+  phones = phones.slice(0, 12);
+
   phones.forEach((phones) => {
     // console.log(phones);
     // step-2 create a div
     const phoneCard = document.createElement("div");
-    phoneCard.classList = `card w-96 bg-gray-100 shadow-xl`;
+    phoneCard.classList = `card lg:w-96 bg-gray-100 shadow-xl`;
     // step-3 set inner html
     phoneCard.innerHTML = `<figure class="px-10 pt-10">
         <img
@@ -33,15 +46,26 @@ const displayPhone = (phones) => {
           <button class="btn btn-primary">Buy Now</button>
         </div>
       </div>`;
+      // step-4 appendChild
     phoneContainer.appendChild(phoneCard);
-    // step-4 appendChild
   });
+  // hide loading spinner
+  toggleLoadingSpinner(false)
 };
 
 // handle search
 const handleSearch = () => {
+  toggleLoadingSpinner(true);
   const inputField = document.getElementById("input-field");
   const searchText = inputField.value;
-  // console.log(searchText);
   loadData(searchText);
+};
+
+const toggleLoadingSpinner = (isLoading) => {
+  const loadingSpinner = document.getElementById("loading-spinner");
+  if (!!isLoading) {
+    loadingSpinner.classList.remove("hidden");
+  } else{
+    loadingSpinner.classList.add("hidden");
+  }
 };
